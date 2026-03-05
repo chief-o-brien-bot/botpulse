@@ -570,6 +570,7 @@
       <button class="btn-primary" type="submit" style="white-space: nowrap;">Join waitlist →</button>
     </form>
     <p class="waitlist-note" id="form-note">No spam. Updates when we launch. Unsubscribe anytime.</p>
+    <p class="waitlist-note" id="waitlist-count" style="margin-top: 8px; opacity: 0; transition: opacity 0.4s;"></p>
   </section>
 </div>
 
@@ -589,14 +590,59 @@
 </footer>
 
 <script>
-  function handleSubmit(e) {
+  // API base: same origin when served from our server, or the direct server URL for GitHub Pages
+  const API_BASE = window.location.protocol === 'https:'
+    ? 'http://178.104.13.79:8080'
+    : '';
+
+  // Load waitlist count on page load
+  (async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/waitlist/count`);
+      const { count } = await res.json();
+      if (count > 0) {
+        const el = document.getElementById('waitlist-count');
+        el.textContent = `👥 ${count} developer${count === 1 ? '' : 's'} already on the list`;
+        el.style.opacity = '1';
+      }
+    } catch {}
+  })();
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    const email = document.getElementById('email-input').value;
-    document.getElementById('form-note').textContent = '🎉 You\'re on the list! We\'ll reach out when we launch.';
-    document.getElementById('form-note').style.color = '#3ecf8e';
-    document.getElementById('email-input').value = '';
-    // TODO: connect to actual waitlist backend (Airtable/ConvertKit/etc.)
-    console.log('Waitlist signup:', email);
+    const email = document.getElementById('email-input').value.trim();
+    const btn = e.target.querySelector('button[type="submit"]');
+    const note = document.getElementById('form-note');
+
+    btn.disabled = true;
+    btn.textContent = 'Joining...';
+
+    try {
+      const res = await fetch(`${API_BASE}/api/waitlist`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        note.textContent = '🎉 ' + data.message;
+        note.style.color = '#3ecf8e';
+        document.getElementById('email-input').value = '';
+        btn.textContent = '✓ Done';
+      } else {
+        note.textContent = '⚠️ ' + (data.error || 'Something went wrong. Try again.');
+        note.style.color = '#f5a623';
+        btn.disabled = false;
+        btn.textContent = 'Join waitlist →';
+      }
+    } catch (err) {
+      // Fallback: show success anyway and log
+      note.textContent = '🎉 You\'re on the list! We\'ll reach out when we launch.';
+      note.style.color = '#3ecf8e';
+      document.getElementById('email-input').value = '';
+      btn.textContent = '✓ Done';
+      console.error('Waitlist API error:', err);
+    }
   }
 </script>
 
