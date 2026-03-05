@@ -14,7 +14,7 @@ module.exports = {
   apps: [{
     name: 'botpulse-api',
     script: 'server.js',
-    cwd: '/home/claude/workspace/botpulse-api',
+    cwd: '/home/claude/workspace/botpulse/server',
     env: {
       NODE_ENV: 'production',
       PORT: 8080,
