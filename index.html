@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BotPulse — The Verified Telegram Bot Directory</title>
+  <meta name="description" content="Discover Telegram bots you can trust. Verified user counts, live growth charts, and uptime monitoring. No spam. No fake numbers." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #111118;
+      --bg3: #18181f;
+      --border: rgba(255,255,255,0.08);
+      --text: #f0f0f5;
+      --muted: #888896;
+      --accent: #5b8def;
+      --accent2: #7c5fe6;
+      --green: #3ecf8e;
+      --yellow: #f5a623;
+      --red: #f5423e;
+      --card-shadow: 0 4px 24px rgba(0,0,0,0.4);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 48px;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 20px; font-weight: 700; text-decoration: none; color: var(--text);
+    }
+    .logo-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--accent);
+      color: white; border: none; border-radius: 8px;
+      padding: 8px 20px; font-size: 14px; font-weight: 600;
+      cursor: pointer; text-decoration: none; transition: opacity 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* HERO */
+    .hero {
+      max-width: 900px; margin: 0 auto;
+      padding: 100px 24px 80px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(91,141,239,0.12); border: 1px solid rgba(91,141,239,0.3);
+      border-radius: 100px; padding: 6px 14px;
+      font-size: 12px; font-weight: 600; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 28px;
+    }
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 72px);
+      font-weight: 800; line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+      font-size: clamp(16px, 2.5vw, 20px);
+      color: var(--muted); max-width: 600px; margin: 0 auto 40px;
+      font-weight: 400;
+    }
+    .hero-ctas { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent); color: white;
+      border-radius: 10px; padding: 14px 28px;
+      font-size: 16px; font-weight: 600; text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 0 0 0 rgba(91,141,239,0.4);
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(91,141,239,0.35); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border); border-radius: 10px;
+      padding: 14px 28px; font-size: 16px; font-weight: 500;
+      text-decoration: none; transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-secondary:hover { background: var(--bg3); border-color: rgba(255,255,255,0.15); }
+
+    /* STATS BAR */
+    .stats-bar {
+      display: flex; align-items: center; justify-content: center; gap: 48px;
+      padding: 24px 48px;
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      background: var(--bg2);
+      flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-num { font-size: 28px; font-weight: 800; color: var(--text); }
+    .stat-label { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+    /* PROBLEM SECTION */
+    .section { max-width: 1100px; margin: 0 auto; padding: 96px 24px; }
+    .section-label {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 800; line-height: 1.2; letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .section-sub { font-size: 18px; color: var(--muted); max-width: 560px; }
+
+    /* PROBLEM CARDS */
+    .problem-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px; margin-top: 48px;
+    }
+    .problem-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 14px; padding: 24px;
+    }
+    .problem-icon { font-size: 28px; margin-bottom: 12px; }
+    .problem-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .problem-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* VS SECTION */
+    .vs-section {
+      background: var(--bg2);
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .vs-grid {
+      max-width: 1100px; margin: 0 auto; padding: 80px 24px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    }
+    .vs-card {
+      background: var(--bg3); border-radius: 16px; padding: 32px;
+      border: 1px solid var(--border);
+    }
+    .vs-card.them { border-color: rgba(245,66,62,0.2); background: rgba(245,66,62,0.04); }
+    .vs-card.us { border-color: rgba(62,207,142,0.2); background: rgba(62,207,142,0.04); }
+    .vs-header {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 14px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; margin-bottom: 24px;
+    }
+    .vs-header.bad { color: var(--red); }
+    .vs-header.good { color: var(--green); }
+    .vs-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 14px; color: var(--muted); margin-bottom: 12px;
+    }
+    .vs-item .icon { flex-shrink: 0; margin-top: 1px; }
+
+    /* FEATURES */
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px; margin-top: 56px;
+    }
+    .feature-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+    .feature-card:hover { border-color: rgba(91,141,239,0.3); transform: translateY(-2px); }
+    .feature-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; margin-bottom: 16px;
+    }
+    .feature-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .feature-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* MOCK LISTING */
+    .mock-section {
+      background: var(--bg2);
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .mock-inner {
+      max-width: 1100px; margin: 0 auto; padding: 80px 24px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+    }
+    .mock-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 18px; padding: 24px;
+      box-shadow: var(--card-shadow);
+    }
+    .mock-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
+    .mock-avatar {
+      width: 56px; height: 56px; border-radius: 14px; flex-shrink: 0;
+      background: linear-gradient(135deg, #5b8def, #7c5fe6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+    }
+    .mock-name { font-size: 18px; font-weight: 700; }
+    .mock-desc { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 600; border-radius: 6px;
+      padding: 3px 8px; margin-top: 6px;
+    }
+    .badge-verified { background: rgba(62,207,142,0.15); color: var(--green); }
+    .badge-active { background: rgba(91,141,239,0.15); color: var(--accent); }
+    .mock-stats {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;
+      margin: 16px 0;
+    }
+    .mock-stat-box {
+      background: var(--bg2); border-radius: 10px; padding: 12px;
+      border: 1px solid var(--border); text-align: center;
+    }
+    .mock-stat-num { font-size: 20px; font-weight: 800; }
+    .mock-stat-lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .chart-placeholder {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 16px; margin-top: 8px;
+      height: 80px; position: relative; overflow: hidden;
+    }
+    .chart-line {
+      position: absolute; bottom: 16px; left: 16px; right: 16px;
+    }
+    .mock-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);
+      font-size: 12px; color: var(--muted);
+    }
+    .uptime-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); display: inline-block; margin-right: 5px; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    /* CTA SECTION */
+    .cta-section {
+      max-width: 700px; margin: 0 auto;
+      padding: 96px 24px; text-align: center;
+    }
+    .cta-section h2 {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 800; line-height: 1.2; letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .cta-section p { font-size: 18px; color: var(--muted); margin-bottom: 36px; }
+    .waitlist-form {
+      display: flex; gap: 10px; max-width: 440px; margin: 0 auto;
+    }
+    .waitlist-form input {
+      flex: 1; background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 16px;
+      color: var(--text); font-size: 15px; outline: none; font-family: inherit;
+    }
+    .waitlist-form input:focus { border-color: var(--accent); }
+    .waitlist-form input::placeholder { color: var(--muted); }
+    .waitlist-note { font-size: 13px; color: var(--muted); margin-top: 12px; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 48px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 16px;
+      font-size: 13px; color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+      .vs-grid { grid-template-columns: 1fr; }
+      .mock-inner { grid-template-columns: 1fr; gap: 40px; }
+      .waitlist-form { flex-direction: column; }
+      footer { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">
+    <div class="logo-icon">⚡</div>
+    BotPulse
+  </a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how-it-works">How it works</a>
+    <a href="#pricing">Pricing</a>
+  </div>
+  <a class="nav-cta" href="#waitlist">Join waitlist</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <span>🔍</span> For Telegram bot builders &amp; users
+  </div>
+  <h1>
+    Discover Telegram bots<br />
+    <span>you can actually trust</span>
+  </h1>
+  <p class="hero-sub">
+    The only Telegram bot directory where every number is verified.
+    Real user counts. Live growth. No spam, no fake stats.
+  </p>
+  <div class="hero-ctas">
+    <a class="btn-primary" href="#waitlist">⚡ Join the waitlist</a>
+    <a class="btn-secondary" href="#features">See how it works →</a>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">1B+</div>
+    <div class="stat-label">Telegram users in 2025</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">0</div>
+    <div class="stat-label">trustworthy bot directories</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">~50%</div>
+    <div class="stat-label">bots on current dirs are spam</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">∞</div>
+    <div class="stat-label">potential if you fix discovery</div>
+  </div>
+</div>
+
+<!-- PROBLEM SECTION -->
+<section class="section">
+  <div class="section-label">The problem</div>
+  <h2 class="section-title">Bot discovery is completely broken</h2>
+  <p class="section-sub">Telegram has 1 billion users and no real App Store. The current directories are directories in name only.</p>
+
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="problem-icon">🎭</div>
+      <h3>Fake numbers everywhere</h3>
+      <p>Every bot claims thousands of users. There's no way to verify. Self-reported stats are meaningless, and no one checks.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">🗑️</div>
+      <h3>Spam floods the results</h3>
+      <p>Open submission means anyone can list anything. Current directories are drowning in dead bots, scam bots, and abandoned projects.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">👤</div>
+      <h3>No developer accountability</h3>
+      <p>Who built this bot? Do they maintain it? Have they built anything credible before? There's no identity layer — anonymity enables abuse.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">📉</div>
+      <h3>No signal of momentum</h3>
+      <p>A bot with 200K active users looks identical to one with 10. No growth charts, no trajectory data, no way to spot the next breakout.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">💀</div>
+      <h3>Dead bots never get removed</h3>
+      <p>Bots go offline and stay listed for years. No uptime monitoring. Users click, the bot doesn't respond, trust erodes.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">💸</div>
+      <h3>Pay-to-rank kills quality</h3>
+      <p>The "featured" slots go to whoever pays, not whoever is best. Scammers have budgets too. This is backwards.</p>
+    </div>
+  </div>
+</section>
+
+<!-- VS SECTION -->
+<div class="vs-section">
+  <div class="vs-grid">
+    <div class="vs-card them">
+      <div class="vs-header bad">❌ Other directories</div>
+      <div class="vs-item"><span class="icon">✗</span> Open submission — anyone lists anything</div>
+      <div class="vs-item"><span class="icon">✗</span> Self-reported user counts (unverifiable)</div>
+      <div class="vs-item"><span class="icon">✗</span> No uptime monitoring — dead bots stay listed</div>
+      <div class="vs-item"><span class="icon">✗</span> Pay-to-feature rewards budget, not quality</div>
+      <div class="vs-item"><span class="icon">✗</span> No developer identity or track record</div>
+      <div class="vs-item"><span class="icon">✗</span> Static snapshot — no growth data</div>
+      <div class="vs-item"><span class="icon">✗</span> Last updated: years ago</div>
+    </div>
+    <div class="vs-card us">
+      <div class="vs-header good">✓ BotPulse</div>
+      <div class="vs-item"><span class="icon">✓</span> Verified listing — bots must pass validation</div>
+      <div class="vs-item"><span class="icon">✓</span> Third-party verified user &amp; activity counts</div>
+      <div class="vs-item"><span class="icon">✓</span> Live uptime monitoring with status badges</div>
+      <div class="vs-item"><span class="icon">✓</span> Featured = verified + high quality, always</div>
+      <div class="vs-item"><span class="icon">✓</span> Developer profiles with reputation scores</div>
+      <div class="vs-item"><span class="icon">✓</span> 30/90-day growth charts per listing</div>
+      <div class="vs-item"><span class="icon">✓</span> Built for 2025's Telegram ecosystem</div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="section-label">What's different</div>
+  <h2 class="section-title">Built on verified data,<br />not vibes</h2>
+  <p class="section-sub">Every metric displayed on BotPulse comes from a source that can't be gamed.</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon" style="background: rgba(62,207,142,0.12);">✅</div>
+      <h3>Verified user counts</h3>
+      <p>Developers connect their bot analytics via a lightweight verification flow. We display confirmed active users, not self-reported estimates. The TrustMRR model, applied to Telegram.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background: rgba(91,141,239,0.12);">📈</div>
+      <h3>Live growth charts</h3>
+      <p>See exactly how a bot is growing — or not. 30 and 90-day user trajectory charts make it instantly obvious which bots have momentum and which are plateauing.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background: rgba(245,166,35,0.12);">⚡</div>
+      <h3>Uptime monitoring</h3>
+      <p>We ping every listed bot regularly. A green status badge means it's alive right now. No more clicking a link only to find the bot died six months ago.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background: rgba(124,95,230,0.12);">👤</div>
+      <h3>Developer identity</h3>
+      <p>Every listing is tied to a verified developer profile. See all bots by the same builder, their response rate, and community reputation. Trust travels across products.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background: rgba(245,66,62,0.12);">🛡️</div>
+      <h3>Quality gate</h3>
+      <p>Submission is manual. Every bot is reviewed before it appears. Scam bots, spam bots, and dead projects never make it to the directory.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background: rgba(62,207,142,0.12);">💰</div>
+      <h3>Transparent monetization</h3>
+      <p>Builders can optionally display verified revenue or "monetized" status. Proof that a bot is profitable is the strongest possible signal of product quality.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MOCK LISTING PREVIEW -->
+<div class="mock-section">
+  <div class="mock-inner">
+    <div>
+      <div class="section-label">What it looks like</div>
+      <h2 class="section-title">A listing that actually means something</h2>
+      <p style="color: var(--muted); font-size: 16px; margin-top: 12px; line-height: 1.7;">
+        Every number you see is real. Every badge is earned.
+        Every chart reflects actual user activity. This is what
+        trust looks like in a directory.
+      </p>
+    </div>
+    <div>
+      <!-- Mock Card -->
+      <div class="mock-card">
+        <div class="mock-header">
+          <div class="mock-avatar">🤖</div>
+          <div>
+            <div class="mock-name">FinanceBot Pro</div>
+            <div class="mock-desc">Portfolio tracker &amp; DCA automator for crypto &amp; stocks</div>
+            <span class="badge badge-verified">✓ Verified</span>
+            <span class="badge badge-active" style="margin-left: 4px;">⚡ Active</span>
+          </div>
+        </div>
+
+        <div class="mock-stats">
+          <div class="mock-stat-box">
+            <div class="mock-stat-num" style="color: var(--green);">48.3K</div>
+            <div class="mock-stat-lbl">Verified users</div>
+          </div>
+          <div class="mock-stat-box">
+            <div class="mock-stat-num" style="color: var(--accent);">+12%</div>
+            <div class="mock-stat-lbl">30d growth</div>
+          </div>
+          <div class="mock-stat-box">
+            <div class="mock-stat-num" style="color: var(--yellow);">99.8%</div>
+            <div class="mock-stat-lbl">Uptime</div>
+          </div>
+        </div>
+
+        <!-- Chart -->
+        <div class="chart-placeholder">
+          <svg class="chart-line" viewBox="0 0 300 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 45 L30 40 L60 38 L90 32 L120 28 L150 24 L180 18 L210 14 L240 8 L270 5 L300 2"
+              stroke="url(#grad)" stroke-width="2" fill="none"/>
+            <path d="M0 45 L30 40 L60 38 L90 32 L120 28 L150 24 L180 18 L210 14 L240 8 L270 5 L300 2 L300 50 L0 50 Z"
+              fill="url(#fill)" opacity="0.2"/>
+            <defs>
+              <linearGradient id="grad" x1="0" y1="0" x2="300" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#5b8def"/>
+                <stop offset="100%" stop-color="#3ecf8e"/>
+              </linearGradient>
+              <linearGradient id="fill" x1="0" y1="0" x2="0" y2="50" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#3ecf8e"/>
+                <stop offset="100%" stop-color="#3ecf8e" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="mock-footer">
+          <span><span class="uptime-dot"></span> Online now</span>
+          <span>by @alexdev · 3 bots listed</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how-it-works">
+  <div class="section-label">How it works</div>
+  <h2 class="section-title">Simple for builders.<br />Trustworthy for users.</h2>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0; margin-top: 56px;">
+    <div style="padding: 32px; border-right: 1px solid var(--border); position: relative;">
+      <div style="font-size: 40px; font-weight: 900; color: rgba(91,141,239,0.2); margin-bottom: 12px;">01</div>
+      <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 8px;">Submit your bot</h3>
+      <p style="font-size: 14px; color: var(--muted);">Fill out a simple form. We review every submission manually — takes 1–2 days.</p>
+    </div>
+    <div style="padding: 32px; border-right: 1px solid var(--border);">
+      <div style="font-size: 40px; font-weight: 900; color: rgba(91,141,239,0.2); margin-bottom: 12px;">02</div>
+      <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 8px;">Connect analytics</h3>
+      <p style="font-size: 14px; color: var(--muted);">Use our lightweight bot SDK or provide a read-only analytics token. We verify your numbers.</p>
+    </div>
+    <div style="padding: 32px; border-right: 1px solid var(--border);">
+      <div style="font-size: 40px; font-weight: 900; color: rgba(91,141,239,0.2); margin-bottom: 12px;">03</div>
+      <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 8px;">Go live with a ✓</h3>
+      <p style="font-size: 14px; color: var(--muted);">Your listing appears with a verified badge, live stats, and uptime monitoring from day one.</p>
+    </div>
+    <div style="padding: 32px;">
+      <div style="font-size: 40px; font-weight: 900; color: rgba(91,141,239,0.2); margin-bottom: 12px;">04</div>
+      <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 8px;">Grow with confidence</h3>
+      <p style="font-size: 14px; color: var(--muted);">Users find you through search and category browsing. Your growth chart does the selling.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WAITLIST CTA -->
+<div style="background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <section class="cta-section" id="waitlist">
+    <div style="font-size: 48px; margin-bottom: 16px;">⚡</div>
+    <h2>We're building this now.<br />Get early access.</h2>
+    <p>Be the first bot listed. Early listings get permanent featured placement and a founder badge on their profile — for free.</p>
+    <form class="waitlist-form" onsubmit="handleSubmit(event)">
+      <input type="email" placeholder="your@email.com" required id="email-input" />
+      <button class="btn-primary" type="submit" style="white-space: nowrap;">Join waitlist →</button>
+    </form>
+    <p class="waitlist-note" id="form-note">No spam. Updates when we launch. Unsubscribe anytime.</p>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div style="display: flex; align-items: center; gap: 8px;">
+    <div class="logo-icon" style="width: 24px; height: 24px; font-size: 12px;">⚡</div>
+    <span style="font-weight: 600; color: var(--text);">BotPulse</span>
+    <span style="margin: 0 8px;">·</span>
+    <span>The verified Telegram bot directory</span>
+  </div>
+  <div style="display: flex; gap: 24px;">
+    <a href="#">Twitter/X</a>
+    <a href="#">Telegram</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<script>
+  function handleSubmit(e) {
+    e.preventDefault();
+    const email = document.getElementById('email-input').value;
+    document.getElementById('form-note').textContent = '🎉 You\'re on the list! We\'ll reach out when we launch.';
+    document.getElementById('form-note').style.color = '#3ecf8e';
+    document.getElementById('email-input').value = '';
+    // TODO: connect to actual waitlist backend (Airtable/ConvertKit/etc.)
+    console.log('Waitlist signup:', email);
+  }
+</script>
+
+</body>
+</html>
